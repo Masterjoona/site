@@ -1,0 +1,12 @@
+body {
+	background-color: #1a1a1a;
+	color: #fff;
+	font-family: "Poppins", sans-serif;
+
+	text-align: center;
+}
+
+@font-face {
+	font-family: "Fira Code light";
+	src: url("lib/fonts/FiraCode-Light.ttf");
+}
