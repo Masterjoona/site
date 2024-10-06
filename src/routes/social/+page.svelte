@@ -46,9 +46,9 @@
 	<meta name="social" content="social" />
 </svelte:head>
 
-<div class="social">
+<div class="contact">
 	<p>you can find me on various platforms</p>
-	<div class="social-links">
+	<div class="contact-links">
 		{#each socials as link}
 			<a href={link.url} target="_blank" rel="noopener noreferrer">
 				<Icon src={link.icon} alt={link.name} />
