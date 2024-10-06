@@ -56,13 +56,3 @@
 		{/each}
 	</div>
 </div>
-
-<style>
-	.social {
-		margin-top: 1%;
-	}
-
-	.social-links {
-		justify-content: center;
-	}
-</style>
