@@ -11,7 +11,7 @@
 
 <main>
 	<div class="quick-info">
-		<p>a dude on the internet</p>
+		<p>a person on the internet</p>
 		<p>i like cats and you can probably find me online on discord</p>
 	</div>
 </main>

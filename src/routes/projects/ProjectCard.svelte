@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let source: string;
+	export let source: string | null = null;
 	export let url: string;
 	export let title: string;
 	export let description: string;
@@ -10,9 +10,11 @@
 		<p class="project-title">{title}</p>
 	</a>
 	<p class="project-description">{description}</p>
-	<a href={source} target="_blank" rel="noopener noreferrer">
-		<p class="source">source</p>
-	</a>
+	{#if source}
+		<a href={source} target="_blank" rel="noopener noreferrer">
+			<p class="source">source</p>
+		</a>
+	{/if}
 </div>
 
 <style>

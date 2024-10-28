@@ -2,7 +2,7 @@
 	import "../app.css";
 
 	import Header from "$lib/ui/Header.svelte";
-	import Source from "$lib/ui/Footer.svelte";
+	import Footer from "$lib/ui/Footer.svelte";
 </script>
 
 <svelte:head>
@@ -13,9 +13,11 @@
 </svelte:head>
 
 <main>
-	<Header />
-	<slot />
-	<Source />
+	<div class="border">
+		<Header />
+		<slot />
+	</div>
+	<Footer />
 </main>
 
 <style>
@@ -24,5 +26,14 @@
 		flex-direction: column;
 		justify-content: center;
 		min-height: 100vh;
+		align-items: center;
+	}
+
+	.border {
+		border: 1px solid #333;
+		border-radius: 10px;
+		padding: 10px;
+		max-width: 60%;
+		width: 100%;
 	}
 </style>

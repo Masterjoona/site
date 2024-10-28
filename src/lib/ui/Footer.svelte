@@ -1,5 +1,5 @@
 <footer class="footer">
-	<p class="footer-text">
+	<p>
 		<span>read if cute • </span>
 		<a href="https://github.com/Masterjoona/site" target="_blank">source code</a>
 	</p>
@@ -8,13 +8,13 @@
 <style>
 	.footer {
 		position: fixed;
-		bottom: 1%;
+		bottom: -1%;
 		width: 100%;
 		text-align: center;
 	}
 
-	.footer-text,
-	.footer-text a {
+	.footer p,
+	.footer a {
 		color: #333;
 	}
 </style>

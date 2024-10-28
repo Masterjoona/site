@@ -5,16 +5,12 @@
 <header>
 	<div class="name">
 		<!-- svelte-ignore a11y_img_redundant_alt -->
-		<img src="/favicon.png" alt="profile picture i use" />
+		<img src="/favicon.png" alt="profile picture i use on most sites" />
 		hi, i'm joona
 	</div>
 	<nav>
 		<ul>
-			{#if $page.url.pathname !== "/"}
-				<li>
-					<a href="/">home</a>
-				</li>
-			{/if}
+			<li><a href="/">home</a></li>
 			<li><a href="/about">about</a></li>
 			<li><a href="/social">social</a></li>
 			<li><a href="/projects">projects</a></li>
