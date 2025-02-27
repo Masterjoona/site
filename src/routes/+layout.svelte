@@ -32,7 +32,7 @@
 	}
 
 	.border {
-		border: 1px solid #333;
+		border: 1px solid #444;
 		border-radius: 10px;
 		padding: 10px;
 		max-width: 60%;

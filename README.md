@@ -1,4 +1,4 @@
-# masterjoona.dev
+# joona.moe
 
 Source code for my site
 

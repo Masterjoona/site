@@ -2,7 +2,7 @@
 	<div class="name">
 		<!-- svelte-ignore a11y_img_redundant_alt -->
 		<img class="pfp" src="/favicon.png" alt="profile picture i use on most sites" />
-		hi, i'm joona
+		<p>hi, i'm joona</p>
 	</div>
 	<div class="nav-links">
 		<span class="nav-link">
