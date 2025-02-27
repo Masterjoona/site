@@ -1,25 +1,27 @@
-<script lang="ts">
-	import { page } from "$app/stores";
-</script>
-
 <header>
 	<div class="name">
 		<!-- svelte-ignore a11y_img_redundant_alt -->
-		<img src="/favicon.png" alt="profile picture i use on most sites" />
+		<img class="pfp" src="/favicon.png" alt="profile picture i use on most sites" />
 		hi, i'm joona
 	</div>
-	<nav>
-		<ul>
-			<li><a href="/">home</a></li>
-			<li><a href="/about">about</a></li>
-			<li><a href="/social">social</a></li>
-			<li><a href="/projects">projects</a></li>
-		</ul>
-	</nav>
+	<div class="nav-links">
+		<span class="nav-link">
+			<a class="page-href" href="/">home</a>
+		</span>
+		<span class="nav-link">
+			<a class="page-href" href="/about">about</a>
+		</span>
+		<span class="nav-link">
+			<a class="page-href" href="/social">social</a>
+		</span>
+		<span class="nav-link">
+			<a class="page-href" href="/projects">projects</a>
+		</span>
+	</div>
 </header>
 
 <style>
-	.name img {
+	.pfp {
 		border-radius: 50%;
 		width: 100px;
 		height: 100px;
@@ -36,36 +38,12 @@
 		font-family: "Fira Code light";
 	}
 
-	@media (max-width: 600px) {
-		.name {
-			margin-left: auto;
-			margin-right: auto;
-			max-width: 90%;
-			flex-direction: column;
-		}
-
-		.name img {
-			margin-right: 0;
-			margin-bottom: 10%;
-		}
-	}
-
-	nav {
-		display: flex;
-		justify-content: center;
+	.nav-links {
 		margin-top: 2vh;
+		margin-bottom: 3vh;
 	}
 
-	nav ul {
-		display: flex;
-		list-style-type: none;
-	}
-
-	nav ul li {
-		margin-right: 2vw;
-	}
-
-	nav ul li a {
+	.page-href {
 		color: white;
 		padding: 10px 15px;
 		border-radius: 5px;
@@ -74,8 +52,38 @@
 			color 0.3s ease;
 	}
 
-	nav ul li a:hover {
+	.page-href:hover {
 		background-color: white;
 		color: black;
+	}
+
+	@media (max-width: 600px) {
+		.name {
+			margin-left: auto;
+			margin-right: auto;
+			max-width: 90%;
+			flex-direction: column;
+		}
+
+		.pfp {
+			margin-right: 0;
+			margin-bottom: 10%;
+		}
+	}
+
+	@media (max-width: 600px) {
+		.nav-links {
+			display: grid;
+			grid-template-columns: repeat(2, auto);
+			gap: 10px;
+			justify-content: center;
+			text-align: center;
+			padding: 0;
+		}
+
+		.nav-link {
+			display: flex;
+			justify-content: center;
+		}
 	}
 </style>

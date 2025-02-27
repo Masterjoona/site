@@ -39,6 +39,8 @@
 			icon: Mail
 		}
 	];
+
+	const enablePageVisitCounter = false;
 </script>
 
 <svelte:head>
@@ -55,4 +57,17 @@
 			</a>
 		{/each}
 	</div>
+	{#if enablePageVisitCounter}
+		<div class="page-visit-counter">
+			<img
+				src="https://count.getloli.com/@:joona.moe?theme=booru-helltaker&scale=0.6"
+				alt=":joona" />
+		</div>
+	{/if}
 </div>
+
+<style>
+	.page-visit-counter {
+		margin-top: 1rem;
+	}
+</style>

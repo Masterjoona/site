@@ -3,6 +3,8 @@
 
 	import Header from "$lib/ui/Header.svelte";
 	import Footer from "$lib/ui/Footer.svelte";
+
+	let { children } = $props();
 </script>
 
 <svelte:head>
@@ -15,7 +17,7 @@
 <main>
 	<div class="border">
 		<Header />
-		<slot />
+		{@render children?.()}
 	</div>
 	<Footer />
 </main>

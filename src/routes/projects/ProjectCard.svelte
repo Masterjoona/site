@@ -1,8 +1,5 @@
 <script lang="ts">
-	export let source: string | null = null;
-	export let url: string;
-	export let title: string;
-	export let description: string;
+	let { source = null, url, title, description } = $props();
 </script>
 
 <div class="project-card">

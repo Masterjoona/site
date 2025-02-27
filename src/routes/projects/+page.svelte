@@ -34,7 +34,7 @@
 		},
 		{
 			title: "UnreadCountBadge",
-			description: "Show a badge in the channel list for the amount ofunread messages.",
+			description: "Show a badge in the channel list for the amount of unread messages.",
 			source: "https://github.com/Masterjoona/vc-unreadcountbadge"
 		},
 		{
