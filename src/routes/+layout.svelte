@@ -5,6 +5,19 @@
 	import Footer from "$lib/ui/Footer.svelte";
 
 	let { children } = $props();
+
+	let pawPrints = $state(false);
+	let neko = $state("");
+
+	const listenForKeys = (e: KeyboardEvent) => {
+		neko += e.key;
+		if (neko.endsWith("neko")) {
+			pawPrints = !pawPrints;
+			neko = "";
+		} else if (!"neko".startsWith(neko)) {
+			neko = "";
+		}
+	};
 </script>
 
 <svelte:head>
@@ -14,7 +27,9 @@
 	<meta name="darkreader-lock" />
 </svelte:head>
 
-<main>
+<svelte:window onkeydown={listenForKeys} />
+
+<main class={pawPrints ? "paw-prints" : ""}>
 	<div class="border">
 		<Header />
 		{@render children?.()}
@@ -31,11 +46,29 @@
 		align-items: center;
 	}
 
+	.paw-prints {
+		background-image: url("$lib/icons/paw.png");
+		background-size: 50px 50px;
+		background-repeat: repeat;
+		background-position: 0 0;
+		animation: paw-scroll 10s linear infinite;
+	}
+
+	@keyframes paw-scroll {
+		from {
+			background-position: 0 0;
+		}
+		to {
+			background-position: -200px 200px;
+		}
+	}
+
 	.border {
 		border: 1px solid #444;
 		border-radius: 10px;
 		padding: 10px;
 		max-width: 60%;
 		width: 100%;
+		background-color: #1a1a1a;
 	}
 </style>
