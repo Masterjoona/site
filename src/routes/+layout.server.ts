@@ -106,10 +106,11 @@ async function getPlayerState() {
     return nowPlaying
 }
 
-
+/*
 export const load: LayoutServerLoad = async () => {
     const state = await getPlayerState()
     return {
         spotify: onlyNecessaryInfo(state),
     };
 };
+*/

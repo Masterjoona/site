@@ -3,7 +3,12 @@
 
 	import Header from "$lib/ui/Header.svelte";
 	import Footer from "$lib/ui/Footer.svelte";
-	import Spotify from "$lib/ui/Spotify.svelte";
+	//import Spotify from "$lib/ui/Spotify.svelte";
+	/*
+	{#if data?.spotify?.name}
+		<Spotify spotify={data.spotify} />
+	{/if}
+	*/
 
 	let { children, data } = $props();
 
@@ -34,9 +39,6 @@
 	<div class="border">
 		<Header />
 		{@render children?.()}
-		{#if data?.spotify?.name}
-			<Spotify spotify={data.spotify} />
-		{/if}
 	</div>
 	<Footer />
 </main>
