@@ -63,7 +63,9 @@ async function fetchSpotifyData(endpoint: string) {
         console.error("guhhh", await response.text());
         return null;
     }
-
+    if (response.status === 204) {
+        return null;
+    }
     return response.json();
 }
 
