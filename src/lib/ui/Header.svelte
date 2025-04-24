@@ -1,3 +1,6 @@
+<script lang="ts">
+</script>
+
 <header>
 	<div class="name">
 		<!-- svelte-ignore a11y_img_redundant_alt -->
@@ -29,12 +32,15 @@
 	}
 
 	.name {
-		font-size: 2.5rem;
-		font-weight: 700;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		margin-top: 2vh;
+		gap: 1rem;
+	}
+
+	.name p {
+		font-size: 2.5rem;
+		font-weight: 700;
 		font-family: "Fira Code light";
 	}
 
@@ -61,17 +67,15 @@
 		.name {
 			margin-left: auto;
 			margin-right: auto;
-			max-width: 90%;
 			flex-direction: column;
+			gap: 0;
 		}
 
 		.pfp {
 			margin-right: 0;
 			margin-bottom: 10%;
 		}
-	}
 
-	@media (max-width: 600px) {
 		.nav-links {
 			display: grid;
 			grid-template-columns: repeat(2, auto);

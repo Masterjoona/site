@@ -3,8 +3,9 @@
 
 	import Header from "$lib/ui/Header.svelte";
 	import Footer from "$lib/ui/Footer.svelte";
+	import Spotify from "$lib/ui/Spotify.svelte";
 
-	let { children } = $props();
+	let { children, data } = $props();
 
 	let pawPrints = $state(false);
 	let neko = $state("");
@@ -33,6 +34,9 @@
 	<div class="border">
 		<Header />
 		{@render children?.()}
+		{#if data?.spotify?.name}
+			<Spotify spotify={data.spotify} />
+		{/if}
 	</div>
 	<Footer />
 </main>
@@ -64,9 +68,9 @@
 	}
 
 	.border {
-		border: 1px solid #444;
+		border: 3px solid #444;
 		border-radius: 10px;
-		padding: 10px;
+		padding: 50px;
 		max-width: 60%;
 		width: 100%;
 		background-color: #1a1a1a;
