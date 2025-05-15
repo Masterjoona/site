@@ -1,25 +1,29 @@
 <script lang="ts">
+	const chars = "hi, i'm joona".split("");
+	const pages = [
+		{ name: "home", href: "/" },
+		{ name: "about", href: "/about" },
+		{ name: "social", href: "/social" },
+		{ name: "projects", href: "/projects" }
+	];
 </script>
 
 <header>
 	<div class="name">
 		<!-- svelte-ignore a11y_img_redundant_alt -->
 		<img class="pfp" src="/favicon.png" alt="profile picture i use on most sites" />
-		<p>hi, i'm joona</p>
+		<div class="chars">
+			{#each chars as char}
+				<span class="char">{char}</span>
+			{/each}
+		</div>
 	</div>
 	<div class="nav-links">
-		<span class="nav-link">
-			<a class="page-href" href="/">home</a>
-		</span>
-		<span class="nav-link">
-			<a class="page-href" href="/about">about</a>
-		</span>
-		<span class="nav-link">
-			<a class="page-href" href="/social">social</a>
-		</span>
-		<span class="nav-link">
-			<a class="page-href" href="/projects">projects</a>
-		</span>
+		{#each pages as page}
+			<span class="nav-link">
+				<a class="page-href" href={page.href}>{page.name}</a>
+			</span>
+		{/each}
 	</div>
 </header>
 
@@ -38,10 +42,23 @@
 		gap: 1rem;
 	}
 
-	.name p {
+	.chars {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.2rem;
+		font-family: "Fira Code light";
 		font-size: 2.5rem;
 		font-weight: 700;
-		font-family: "Fira Code light";
+	}
+
+	.char {
+		white-space: pre;
+		display: inline-block;
+		transition: transform 0.3s ease;
+	}
+	.char:hover {
+		transform: translateY(-5px);
 	}
 
 	.nav-links {
