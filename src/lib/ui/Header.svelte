@@ -6,12 +6,73 @@
 		{ name: "social", href: "/social" },
 		{ name: "projects", href: "/projects" }
 	];
+
+	const rotatePfp = (el: HTMLImageElement) => {
+		let rotation = 0;
+		let intervalId: number | null = null;
+		let animationFrameId: number | null = null;
+
+		const rotate = () => {
+			rotation = (rotation + 5) % 360;
+			el.style.transform = `rotate(${rotation}deg)`;
+		};
+
+		const startRotation = () => {
+			if (intervalId !== null) return;
+			intervalId = setInterval(rotate, 16);
+		};
+
+		const stopRotation = () => {
+			if (intervalId !== null) {
+				clearInterval(intervalId);
+				intervalId = null;
+			}
+
+			let current = rotation % 360;
+			if (current < 0) current += 360;
+
+			const target = 360;
+			const diff = target - current;
+
+			const start = current;
+			const startTime = performance.now();
+
+			const animateBack = (now: number) => {
+				const elapsed = now - startTime;
+				const progress = Math.min(elapsed / 800, 1);
+				const eased = 1 - Math.pow(1 - progress, 2);
+				const angle = start + diff * eased;
+
+				el.style.transform = `rotate(${angle}deg)`;
+
+				if (progress < 1) {
+					animationFrameId = requestAnimationFrame(animateBack);
+				} else {
+					rotation = 0;
+					el.style.transform = "rotate(0deg)";
+					animationFrameId = null;
+				}
+			};
+
+			if (animationFrameId !== null) {
+				cancelAnimationFrame(animationFrameId);
+			}
+			animationFrameId = requestAnimationFrame(animateBack);
+		};
+
+		el.addEventListener("mouseenter", startRotation);
+		el.addEventListener("mouseleave", stopRotation);
+	};
 </script>
 
 <header>
 	<div class="name">
 		<!-- svelte-ignore a11y_img_redundant_alt -->
-		<img class="pfp" src="/favicon.png" alt="profile picture i use on most sites" />
+		<img
+			class="pfp"
+			src="/favicon.png"
+			alt="profile picture i use on most sites"
+			{@attach rotatePfp} />
 		<div class="chars">
 			{#each chars as char}
 				<span class="char">{char}</span>
