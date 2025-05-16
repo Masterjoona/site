@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { onMount } from "svelte";
+	import { page } from "$app/state";
+
 	const chars = "hi, i'm joona".split("");
 	const pages = [
 		{ name: "home", href: "/" },
@@ -7,13 +10,15 @@
 		{ name: "projects", href: "/projects" }
 	];
 
+	let typed = $state("");
+
 	const rotatePfp = (el: HTMLImageElement) => {
 		let rotation = 0;
 		let intervalId: number | null = null;
 		let animationFrameId: number | null = null;
 
 		const rotate = () => {
-			rotation = (rotation + 5) % 360;
+			rotation = (rotation + 3) % 360;
 			el.style.transform = `rotate(${rotation}deg)`;
 		};
 
@@ -63,6 +68,20 @@
 		el.addEventListener("mouseenter", startRotation);
 		el.addEventListener("mouseleave", stopRotation);
 	};
+
+	onMount(() => {
+		let index = 0;
+		const intervalId = setInterval(() => {
+			if (index < chars.length) {
+				typed += chars[index];
+				index++;
+			} else {
+				clearInterval(intervalId);
+			}
+		}, 100);
+
+		return () => clearInterval(intervalId);
+	});
 </script>
 
 <header>
@@ -74,15 +93,17 @@
 			alt="profile picture i use on most sites"
 			{@attach rotatePfp} />
 		<div class="chars">
-			{#each chars as char}
+			{#each typed as char}
 				<span class="char">{char}</span>
 			{/each}
 		</div>
 	</div>
 	<div class="nav-links">
-		{#each pages as page}
+		{#each pages as route}
 			<span class="nav-link">
-				<a class="page-href" href={page.href}>{page.name}</a>
+				<a
+					class={`page-href ${(page.route.id ?? "") === route.href ? "current-page" : ""}`}
+					href={route.href}>{route.name}</a>
 			</span>
 		{/each}
 	</div>
@@ -105,12 +126,10 @@
 
 	.chars {
 		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 0.2rem;
 		font-family: "Fira Code light";
 		font-size: 2.5rem;
 		font-weight: 700;
+		gap: 0.1em;
 	}
 
 	.char {
@@ -127,10 +146,15 @@
 		margin-bottom: 3vh;
 	}
 
+	.nav-link {
+		padding: 5px;
+	}
+
 	.page-href {
 		color: white;
 		padding: 10px 15px;
 		border-radius: 5px;
+		text-decoration: none;
 		transition:
 			background-color 0.3s ease,
 			color 0.3s ease;
@@ -139,6 +163,13 @@
 	.page-href:hover {
 		background-color: white;
 		color: black;
+		text-decoration: underline;
+		text-underline-offset: 6px;
+	}
+
+	.current-page {
+		text-decoration: underline;
+		text-underline-offset: 6px;
 	}
 
 	@media (max-width: 600px) {
@@ -166,6 +197,13 @@
 		.nav-link {
 			display: flex;
 			justify-content: center;
+			padding: 0px;
+		}
+
+		.chars {
+			font-size: 1.5rem;
+			justify-content: center;
+			gap: 0.2em;
 		}
 	}
 </style>

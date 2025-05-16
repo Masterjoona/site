@@ -61,6 +61,11 @@
 			title: "TimelessClips",
 			description: "Custom clip length",
 			source: "https://github.com/Masterjoona/vc-timelessclips"
+		},
+		{
+			title: "WallpaperFree",
+			description: "Use the DM wallpapers anywhere or set a custom wallpaper",
+			source: "https://github.com/Masterjoona/vc-wallpaperfree"
 		}
 	];
 </script>
