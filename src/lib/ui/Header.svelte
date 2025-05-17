@@ -67,6 +67,13 @@
 
 		el.addEventListener("mouseenter", startRotation);
 		el.addEventListener("mouseleave", stopRotation);
+
+		return () => {
+			el.removeEventListener("mouseenter", startRotation);
+			el.removeEventListener("mouseleave", stopRotation);
+			if (intervalId !== null) clearInterval(intervalId);
+			if (animationFrameId !== null) cancelAnimationFrame(animationFrameId);
+		};
 	};
 
 	onMount(() => {
