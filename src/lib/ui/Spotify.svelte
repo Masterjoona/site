@@ -1,130 +1,119 @@
 <script lang="ts">
-	import { onMount } from "svelte";
-	import type { Artist } from "$lib/types/Spotify";
+	import { type RecentlyPlayedItem } from "$lib/types/Recent";
 
-	let {
-		spotify
-	}: {
-		spotify: {
-			timestamp: number;
-			progress: number;
-			duration: number;
-			name: string;
-			artists: Artist[];
-			image: string;
-			trackUrl: string;
-			albumUrl: string;
-			albumName: string;
-		};
-	} = $props();
-
-	let currentProgress = $state(spotify.progress);
-
-	onMount(() => {
-		const interval = setInterval(() => {
-			if (currentProgress < spotify.duration) {
-				currentProgress += 1000;
-			} else {
-				clearInterval(interval);
-			}
-		}, 1000);
-
-		return () => clearInterval(interval);
-	});
-
-	function formatTime(ms: number): string {
-		const minutes = Math.floor(ms / 60000);
-		const seconds = Math.floor((ms % 60000) / 1000);
-		return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-	}
+	let { recent }: { recent: RecentlyPlayedItem[] | null } = $props();
 </script>
 
-<div class="spotify-container">
-	<div class="spotify">
-		<a href={spotify.albumUrl} target="_blank" rel="noopener noreferrer">
-			<img src={spotify.image} alt={spotify.albumName} />
-		</a>
-		<div class="spotify-info">
-			<a href={spotify.trackUrl} target="_blank" rel="noopener noreferrer">
-				<p class="track-name">{spotify.name}</p>
-			</a>
-			{#each spotify.artists as artist}
-				<p>{artist.name}</p>
+{#if recent && recent.length > 0}
+	<div class="spotify-container">
+		<div class="spotify-list">
+			{#each recent as item}
+				<div class="spotify-item">
+					<a href={item.track.url} target="_blank" rel="noopener noreferrer" class="spotify-link">
+						<img src={item.album.image} alt={item.album.name} class="spotify-image" />
+						<div class="spotify-info">
+							<div class="spotify-track">{item.track.name}</div>
+							<div class="spotify-artist">
+								{item.artists.map((artist) => artist.name).join(", ")}
+							</div>
+							<div class="spotify-album">{item.album.name}</div>
+						</div>
+					</a>
+				</div>
 			{/each}
-			<div class="progress-bar">
-				<div style="width: {Math.min((currentProgress / spotify.duration) * 100, 100)}%;"></div>
-			</div>
-			<p>{formatTime(currentProgress)} / {formatTime(spotify.duration)}</p>
 		</div>
 	</div>
-</div>
+{/if}
 
 <style>
 	.spotify-container {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		width: 100%;
-	}
-
-	.spotify {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		background-color: #1db954;
-		color: white;
+		margin-top: 1rem;
+		max-width: 100%;
 		padding: 1rem;
-		border-radius: 8px;
-		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-		margin-top: 3%;
-		width: 50%;
+		background: linear-gradient(135deg, #1db954 0%, #191414 100%);
+		border-radius: 0.75rem;
 	}
 
-	.spotify img {
-		width: 64px;
-		height: 64px;
-		border-radius: 4px;
+	.spotify-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.spotify-item {
+		background-color: #121212;
+		border-radius: 0.75rem;
+		overflow: hidden;
+		transition:
+			transform 0.2s ease,
+			box-shadow 0.2s ease;
+	}
+
+	.spotify-item:hover {
+		transform: scale(1.01);
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+	}
+
+	.spotify-link {
+		display: flex;
+		gap: 0.75rem;
+		padding: 0.75rem;
+		color: #fff;
+		text-decoration: none;
+		align-items: center;
+	}
+
+	.spotify-image {
+		width: 56px;
+		height: 56px;
 		object-fit: cover;
+		border-radius: 0.5rem;
+		flex-shrink: 0;
 	}
 
 	.spotify-info {
-		flex: 1;
-	}
-
-	.spotify-info p {
-		margin: 0;
-		font-size: 0.9rem;
-	}
-
-	.spotify-info a {
-		text-decoration: none;
-		color: inherit;
-		transition: color 0.3s ease;
-	}
-
-	.spotify-info p:first-child {
-		font-weight: bold;
-		font-size: 1.1rem;
-	}
-
-	.progress-bar {
-		margin-top: 0.5rem;
-		height: 6px;
-		background-color: rgba(255, 255, 255, 0.3);
-		border-radius: 3px;
+		display: flex;
+		flex-direction: column;
 		overflow: hidden;
 	}
 
-	.progress-bar div {
-		height: 100%;
-		background-color: white;
-		width: 0%;
-		transition: width 0.3s ease;
+	.spotify-track {
+		font-size: 0.9rem;
+		font-weight: 600;
+		color: #fff;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
-	@media (max-width: 600px) {
-		.spotify {
+	.spotify-artist,
+	.spotify-album {
+		font-size: 0.75rem;
+		color: #b3b3b3;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	/* Responsive tweaks for wider screens */
+	@media (min-width: 600px) {
+		.spotify-list {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+		}
+		.spotify-link {
+			display: flex;
+			align-items: center;
+			gap: 0.75rem;
+			padding: 0.75rem;
+			color: #fff;
+			text-decoration: none;
 			width: 100%;
+		}
+
+		.spotify-image {
+			width: 64px;
+			height: 64px;
 		}
 	}
 </style>

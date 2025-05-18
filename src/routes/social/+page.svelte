@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { PUBLIC_ENABLE_PAGE_VISIT_COUNTER } from "$env/static/public";
+
 	import Codeberg from "$lib/icons/codeberg.svg";
 	import Discord from "$lib/icons/discord.svg";
 	import Github from "$lib/icons/github.svg";
@@ -6,6 +8,10 @@
 	import Telegram from "$lib/icons/telegram.svg";
 
 	import Icon from "$lib/ui/Icon.svelte";
+	import Spotify from "$lib/ui/Spotify.svelte";
+	import type { PageProps } from "./$types";
+
+	let { data }: PageProps = $props();
 
 	const socials = [
 		{
@@ -39,8 +45,6 @@
 			icon: Mail
 		}
 	];
-
-	const enablePageVisitCounter = false;
 </script>
 
 <svelte:head>
@@ -57,13 +61,14 @@
 			</a>
 		{/each}
 	</div>
-	{#if enablePageVisitCounter}
+	{#if PUBLIC_ENABLE_PAGE_VISIT_COUNTER === "true"}
 		<div class="page-visit-counter">
 			<img
 				src="https://count.getloli.com/@:joona.moe?theme=booru-helltaker&scale=0.6"
 				alt=":joona" />
 		</div>
 	{/if}
+	<Spotify recent={data.recent} />
 </div>
 
 <style>

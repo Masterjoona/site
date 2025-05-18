@@ -1,16 +1,12 @@
 <script lang="ts">
 	import "../app.css";
 
+	import type { LayoutProps } from "./$types";
+
 	import Header from "$lib/ui/Header.svelte";
 	import Footer from "$lib/ui/Footer.svelte";
-	//import Spotify from "$lib/ui/Spotify.svelte";
-	/*
-	{#if data?.spotify?.name}
-		<Spotify spotify={data.spotify} />
-	{/if}
-	*/
 
-	let { children, data } = $props();
+	let { children }: LayoutProps = $props();
 
 	let pawPrints = $state(false);
 	let neko = $state("");
@@ -76,5 +72,6 @@
 		max-width: 60%;
 		width: 100%;
 		background-color: #1a1a1a;
+		text-align: center;
 	}
 </style>

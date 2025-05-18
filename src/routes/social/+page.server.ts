@@ -1,13 +1,14 @@
-import type { LayoutServerLoad } from "./$types";
 import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REFRESH_TOKEN } from "$env/static/private";
+import type { RecentlyPlayedResp, RecentlyPlayedItem } from "$lib/types/Recent";
 
 import { type PlayerState } from "$lib/types/Spotify";
+import type { PageServerLoad } from "./$types";
 
 const basicAuth = btoa(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`);
 
 const ENDPOINTS = {
     NOW_PLAYING: `https://api.spotify.com/v1/me/player`,
-    RECENTLY_PLAYED: `https://api.spotify.com/v1/me/player/recently-played?limit=1`,
+    RECENTLY_PLAYED: `https://api.spotify.com/v1/me/player/recently-played?limit=10`,
     TOKEN: `https://accounts.spotify.com/api/token`
 };
 
@@ -71,7 +72,7 @@ async function fetchSpotifyData(endpoint: string) {
 
 let cachedNowPlaying: PlayerState | null = null;
 let nowPlayingCachedAt: number | null = null;
-const CACHE_DURATION = 10 * 1000;
+const CACHE_DURATION = 10000;
 
 function onlyNecessaryInfo(nowPlaying: PlayerState) {
     if (!nowPlaying || !nowPlaying.is_playing || nowPlaying.device.is_private_session) {
@@ -106,11 +107,65 @@ async function getPlayerState() {
     return nowPlaying
 }
 
-/*
-export const load: LayoutServerLoad = async () => {
-    const state = await getPlayerState()
-    return {
-        spotify: onlyNecessaryInfo(state),
-    };
+const recentlyPlayedCache: { data: RecentlyPlayedItem[] | null, cachedAt: number } = {
+    data: null,
+    cachedAt: 0
 };
-*/
+
+const getRecentlyPlayed = async () => {
+    const now = Date.now();
+    if (recentlyPlayedCache.data && now - recentlyPlayedCache.cachedAt < CACHE_DURATION) {
+        console.log("Using cached recently played data");
+        return recentlyPlayedCache.data;
+    }
+    console.log("Fetching new recently played data");
+    recentlyPlayedCache.cachedAt = now;
+    const recentlyPlayed = await fetchSpotifyData(ENDPOINTS.RECENTLY_PLAYED) as RecentlyPlayedResp | null;
+    if (!recentlyPlayed || !recentlyPlayed.items || recentlyPlayed.items.length === 0) {
+        return null;
+    }
+
+    const data = recentlyPlayed.items.map(item => ({
+        playedAt: item.played_at,
+        track: {
+            name: item.track.name,
+            url: item.track.external_urls.spotify,
+            duration_ms: item.track.duration_ms,
+        },
+        artists: item.track.artists.map(artist => ({
+            name: artist.name,
+            url: artist.external_urls.spotify,
+        })),
+        album: {
+            name: item.track.album.name,
+            url: item.track.album.external_urls.spotify,
+            image: item.track.album.images[0].url
+        },
+        playTimes: 0
+    })).reduce((acc, item) => {
+        const existing = acc.find(i => i.track.url === item.track.url);
+        if (existing) {
+            existing.playTimes += 1;
+        } else {
+            item.playTimes = 1;
+            acc.push(item);
+        }
+        return acc;
+    }, [] as RecentlyPlayedItem[]);
+
+    recentlyPlayedCache.data = data;
+    return data;
+}
+
+
+export const load: PageServerLoad = async () => {
+    const recent = await getRecentlyPlayed();
+    if (recent && recent.length > 0) {
+        const lastPlayed = new Date(recent[0].playedAt);
+        const sixHoursAgo = new Date(Date.now() - 6 * 60 * 60 * 1000);
+        if (lastPlayed < sixHoursAgo) {
+            return { recent: null };
+        }
+    }
+    return { recent };
+};
