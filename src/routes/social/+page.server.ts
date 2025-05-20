@@ -72,7 +72,7 @@ async function fetchSpotifyData(endpoint: string) {
 
 let cachedNowPlaying: PlayerState | null = null;
 let nowPlayingCachedAt: number | null = null;
-const CACHE_DURATION = 10000;
+const CACHE_DURATION = 180_000;
 
 function onlyNecessaryInfo(nowPlaying: PlayerState) {
     if (!nowPlaying || !nowPlaying.is_playing || nowPlaying.device.is_private_session) {

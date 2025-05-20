@@ -155,6 +155,15 @@
 
 	.nav-link {
 		padding: 5px;
+
+		transition-duration: 0.25s;
+		transition-property: padding;
+		transition-timing-function: ease-in-out;
+	}
+
+	.nav-link:hover {
+		padding-left: 0.45em;
+		padding-right: 0.45em;
 	}
 
 	.page-href {
