@@ -4,8 +4,11 @@
 	let { recent }: { recent: RecentlyPlayedItem[] | null } = $props();
 </script>
 
-{#if recent && recent.length > 0}
-	<div class="spotify-container">
+<div class="spotify-container">
+	<div class="spotify-header">
+		<p>Some songs i have recently listened on spotify</p>
+	</div>
+	{#if recent && recent.length > 0}
 		<div class="spotify-list">
 			{#each recent as item}
 				<div class="spotify-item">
@@ -22,8 +25,10 @@
 				</div>
 			{/each}
 		</div>
-	</div>
-{/if}
+	{:else}
+		<p>looks like i havent listened to anything recently</p>
+	{/if}
+</div>
 
 <style>
 	.spotify-container {
@@ -95,7 +100,6 @@
 		text-overflow: ellipsis;
 	}
 
-	/* Responsive tweaks for wider screens */
 	@media (min-width: 600px) {
 		.spotify-list {
 			display: grid;

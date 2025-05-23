@@ -115,10 +115,10 @@ const recentlyPlayedCache: { data: RecentlyPlayedItem[] | null, cachedAt: number
 const getRecentlyPlayed = async () => {
     const now = Date.now();
     if (recentlyPlayedCache.data && now - recentlyPlayedCache.cachedAt < CACHE_DURATION) {
-        console.log("Using cached recently played data");
+        //console.log("Using cached recently played data");
         return recentlyPlayedCache.data;
     }
-    console.log("Fetching new recently played data");
+    //console.log("Fetching new recently played data");
     recentlyPlayedCache.cachedAt = now;
     const recentlyPlayed = await fetchSpotifyData(ENDPOINTS.RECENTLY_PLAYED) as RecentlyPlayedResp | null;
     if (!recentlyPlayed || !recentlyPlayed.items || recentlyPlayed.items.length === 0) {
@@ -153,19 +153,14 @@ const getRecentlyPlayed = async () => {
         return acc;
     }, [] as RecentlyPlayedItem[]);
 
-    recentlyPlayedCache.data = data;
-    return data;
+    const sixHoursAgo = new Date(Date.now() - 6 * 60 * 60 * 1000);
+    const filteredData = data.filter(item => new Date(item.playedAt) > sixHoursAgo);
+    recentlyPlayedCache.data = filteredData;
+    return filteredData;
 }
 
 
 export const load: PageServerLoad = async () => {
     const recent = await getRecentlyPlayed();
-    if (recent && recent.length > 0) {
-        const lastPlayed = new Date(recent[0].playedAt);
-        const sixHoursAgo = new Date(Date.now() - 6 * 60 * 60 * 1000);
-        if (lastPlayed < sixHoursAgo) {
-            return { recent: null };
-        }
-    }
     return { recent };
 };
