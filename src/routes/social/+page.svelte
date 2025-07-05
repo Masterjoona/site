@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { PUBLIC_ENABLE_PAGE_VISIT_COUNTER } from "$env/static/public";
 
+	import { page } from "$app/state";
+
 	import Codeberg from "$lib/icons/codeberg.svg";
 	import Discord from "$lib/icons/discord.svg";
 	import Github from "$lib/icons/github.svg";
@@ -12,6 +14,8 @@
 	import type { PageProps } from "./$types";
 
 	let { data }: PageProps = $props();
+
+	const hoverSocial = $state(page.url.searchParams.get("hover") || "");
 
 	const socials = [
 		{
@@ -41,7 +45,7 @@
 		{
 			name: "email",
 			url: "mailto:j@masterjoona.dev",
-			text: "j [at] masterjoona [dot] dev",
+			text: "j@masterjoona.dev",
 			icon: Mail
 		}
 	];
@@ -55,9 +59,13 @@
 <div class="contact">
 	<p>you can find me on various platforms</p>
 	<div class="contact-links">
-		{#each socials as link}
-			<a href={link.url} target="_blank" rel="noopener noreferrer">
-				<Icon src={link.icon} alt={link.name} />
+		{#each socials as social}
+			<a href={social.url} target="_blank" rel="noopener noreferrer">
+				<Icon
+					src={social.icon}
+					alt={social.name}
+					text={social.text}
+					hover={hoverSocial === social.name} />
 			</a>
 		{/each}
 	</div>
@@ -73,6 +81,14 @@
 
 <style>
 	.page-visit-counter {
+		margin-top: 1rem;
+	}
+
+	.contact-links {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 1rem;
 		margin-top: 1rem;
 	}
 </style>

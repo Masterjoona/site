@@ -1,5 +1,5 @@
 <div class="about-me">
-	<p>18 year old finnish student who doesnt know what to do with his life</p>
+	<p>19 year old finnish dude who doesnt know what to do with his life</p>
 	<p>im not definitely not the best programmer, but i dabble</p>
 	<p>i mostly keep to myself and lurk discord channels but feel free to dm me</p>
 </div>

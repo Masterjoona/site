@@ -1,5 +1,9 @@
 <script lang="ts">
+	import type { PageProps } from "./$types";
+
 	import ProjectCard from "./ProjectCard.svelte";
+
+	let { data }: PageProps = $props();
 
 	const myProjects = [
 		{
@@ -15,59 +19,6 @@
 			url: "https://pawst.eu"
 		}
 	];
-
-	const plugins = [
-		{
-			title: "SpotifyLyrics",
-			description: "displays lyrics for the currently playing song on spotify",
-			source: "https://github.com/Masterjoona/vc-spotifylyrics"
-		},
-		{
-			title: "SidebarChat",
-			description: "View two chats at once",
-			source: "https://github.com/Masterjoona/vc-sidebarchat"
-		},
-		{
-			title: "BetterPlusReacts",
-			description: "The amount of + before the emoji is the message it adds the reaction to",
-			source: "https://github.com/Masterjoona/vc-betterplusreacts"
-		},
-		{
-			title: "UnreadCountBadge",
-			description: "Show a badge in the channel list for the amount of unread messages.",
-			source: "https://github.com/Masterjoona/vc-unreadcountbadge"
-		},
-		{
-			title: "randomQOLStuff",
-			description: "Random patches",
-			source: "https://github.com/Masterjoona/vc-randomqolstuff"
-		},
-		{
-			title: "TriggerWarning",
-			description: "Spoiler words in messages and files/embeds based on a list of keywords",
-			source: "https://github.com/Masterjoona/vc-triggerwarning"
-		},
-		{
-			title: "atSomeone",
-			description: "Mention someone or some role randomly",
-			source: "https://github.com/Masterjoona/vc-atsomeone"
-		},
-		{
-			title: "StreamPIP",
-			description: "Open a stream in a picture in picture window",
-			source: "https://github.com/Masterjoona/vc-streampips"
-		},
-		{
-			title: "TimelessClips",
-			description: "Custom clip length",
-			source: "https://github.com/Masterjoona/vc-timelessclips"
-		},
-		{
-			title: "WallpaperFree",
-			description: "Use the DM wallpapers anywhere or set a custom wallpaper",
-			source: "https://github.com/Masterjoona/vc-wallpaperfree"
-		}
-	];
 </script>
 
 <svelte:head>
@@ -76,27 +27,30 @@
 </svelte:head>
 
 <div class="cool-projects">
-	<p>i don't really have big projects, but here are some that i've made</p>
-	<div class="project-cards">
-		{#each myProjects as { title, description, source, url }}
-			<ProjectCard {title} {description} {source} {url} />
-		{/each}
-	</div>
-
-	<details class="details-plugin">
-		<summary>vencord plugins</summary>
-		<div class="project-cards">
-			{#each plugins as { title, description, source }}
-				<ProjectCard {title} {description} url={source} />
-			{/each}
-		</div>
-	</details>
+	<p>some stuff that i have made</p>
 
 	<p>
 		if you like what i do you can support me with <a
-			class="github-sponsor"
+			class="link"
 			href="https://github.com/sponsors/Masterjoona/">github sponsors</a>
 	</p>
+
+	<div class="project-cards">
+		{#each myProjects as { title, description, source, url }}
+			<ProjectCard {title} {description} {source} publicUrl={url} />
+		{/each}
+	</div>
+
+	<p>vencord plugins</p>
+	<p>
+		if you want me to make a plugin for you, <a href="/social?hover=discord" class="link"
+			>contact me</a>
+	</p>
+	<div class="project-cards">
+		{#each data.pluginRepos as { name, description, source, stars, readme }}
+			<ProjectCard title={name} {description} {source} {stars} {readme} />
+		{/each}
+	</div>
 </div>
 
 <style>
@@ -112,11 +66,8 @@
 		font-family: "Fira Code light";
 	}
 
-	.details-plugin {
-		margin-top: 2%;
-	}
-
-	.github-sponsor {
+	.link {
 		color: #0366d6;
+		text-underline-offset: 3px;
 	}
 </style>
