@@ -1,33 +1,39 @@
 <script lang="ts">
 	import { type RecentlyPlayedItem } from "$lib/types/Recent";
 
-	let { recent }: { recent: RecentlyPlayedItem[] | null } = $props();
+	let { recent }: { recent: Promise<RecentlyPlayedItem[] | null> } = $props();
 </script>
 
 <div class="spotify-container">
 	<div class="spotify-header">
 		<p>Some songs i have recently listened on spotify</p>
 	</div>
-	{#if recent && recent.length > 0}
-		<div class="spotify-list">
-			{#each recent as item}
-				<div class="spotify-item">
-					<a href={item.track.url} target="_blank" rel="noopener noreferrer" class="spotify-link">
-						<img src={item.album.image} alt={item.album.name} class="spotify-image" />
-						<div class="spotify-info">
-							<div class="spotify-track">{item.track.name}</div>
-							<div class="spotify-artist">
-								{item.artists.map((artist) => artist.name).join(", ")}
+	{#await recent}
+		<p>loading songs...</p>
+	{:then items}
+		{#if items && items.length > 0}
+			<div class="spotify-list">
+				{#each items as item}
+					<div class="spotify-item">
+						<a href={item.track.url} target="_blank" rel="noopener noreferrer" class="spotify-link">
+							<img src={item.album.image} alt={item.album.name} class="spotify-image" />
+							<div class="spotify-info">
+								<div class="spotify-track">{item.track.name}</div>
+								<div class="spotify-artist">
+									{item.artists.map((artist) => artist.name).join(", ")}
+								</div>
+								<div class="spotify-album">{item.album.name}</div>
 							</div>
-							<div class="spotify-album">{item.album.name}</div>
-						</div>
-					</a>
-				</div>
-			{/each}
-		</div>
-	{:else}
-		<p>looks like i havent listened to anything recently</p>
-	{/if}
+						</a>
+					</div>
+				{/each}
+			</div>
+		{:else}
+			<p>looks like i havent listened to anything recently</p>
+		{/if}
+	{:catch error}
+		<p>uh oh: {error.message}</p>
+	{/await}
 </div>
 
 <style>

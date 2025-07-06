@@ -57,7 +57,7 @@ const getPublicPluginRepos = createAsyncCache(async () => {
     }
 
     const repos = await resp.json();
-    return (await Promise.all(
+    const pluginRepos = (await Promise.all(
         repos
             .filter((repo: any) => repo.name.startsWith("vc-") && !repo.fork)
             .map(async (repo: any) => {
@@ -71,13 +71,9 @@ const getPublicPluginRepos = createAsyncCache(async () => {
                 };
             })
     )) as { name: string; description: string; readme: string; source: string; stars: number }[];
-}, 6 * 60 * 60 * 1000)
+    return pluginRepos.sort((a, b) => b.stars - a.stars);
+}, 24 * 60 * 60 * 1000)
 
 export const load: PageServerLoad = async () => {
-    const repos = await getPublicPluginRepos();
-    if (!repos || repos.length === 0) {
-        return { pluginRepos: [] };
-    }
-    repos.sort((a, b) => b.stars - a.stars);
-    return { pluginRepos: repos };
+    return { pluginRepos: getPublicPluginRepos() };
 };

@@ -56,7 +56,7 @@ async function fetchSpotifyData(endpoint: string) {
     });
 
     if (!response.ok) {
-        console.error("Spotify API error:", await response.text());
+        console.error("guhh:", await response.text());
         return null;
     }
     if (response.status === 204) {
@@ -108,6 +108,5 @@ const getRecentlyPlayed = createAsyncCache(async () => {
 }, 3 * 60 * 1000);
 
 export const load: PageServerLoad = async () => {
-    const recent = await getRecentlyPlayed();
-    return { recent };
+    return { recent: getRecentlyPlayed() };
 };

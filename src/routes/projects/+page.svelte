@@ -47,9 +47,19 @@
 			>contact me</a>
 	</p>
 	<div class="project-cards">
-		{#each data.pluginRepos as { name, description, source, stars, readme }}
-			<ProjectCard title={name} {description} {source} {stars} {readme} />
-		{/each}
+		{#await data.pluginRepos}
+			<p>loading plugins...</p>
+		{:then pluginRepos}
+			{#if pluginRepos == null || pluginRepos.length === 0}
+				<p>no plugins found</p>
+			{:else}
+				{#each pluginRepos as { name, description, source, stars, readme }}
+					<ProjectCard title={name} {description} {source} {stars} {readme} />
+				{/each}
+			{/if}
+		{:catch error}
+			<p>uh oh: {error.message}</p>
+		{/await}
 	</div>
 </div>
 
